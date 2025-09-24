@@ -25,6 +25,11 @@ class BankServer:
             with open(self._wal_path, "w", encoding="utf-8") as f:
                 f.write("# WAL de transações (JSON por linha)\n")
 
+        # Cria state.json se não existir
+        if not os.path.exists(self._state_path):
+            with open(self._state_path, "w", encoding="utf-8") as f:
+                json.dump({"accounts": {}, "timestamp": time.time()}, f, ensure_ascii=False, indent=2)
+
     # ---------- utilidades ----------
     def _get_lock(self, user: str) -> threading.Lock:
         with self._global_lock:

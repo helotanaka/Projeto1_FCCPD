@@ -1,1 +1,3 @@
 # WAL de transações (JSON por linha)
+{"tx": "deposit", "tx_id": "f5a6dfbe-9750-4ade-a1c5-dcb1b47db731", "user": "alice", "amount": 2500, "after": 102500}
+{"tx": "transfer", "tx_id": "5f531981-0866-4a29-80f8-2d2e07bc69c1", "from": "alice", "to": "bob", "amount": 777, "after_from": 101723, "after_to": 50777}
