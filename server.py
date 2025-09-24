@@ -2,14 +2,14 @@
 import json, socket, threading, uuid, time, os
 from typing import Dict, Set
 
-LINE_SEP = "\n"  # protocolo: uma mensagem JSON por linha
+LINE_SEP = "\n"  # protocolo: uma mensagem JSON POR LINHA
 
 class BankServer:
     def __init__(self, host="127.0.0.1", port=5000):
         self.host, self.port = host, port
         self._srv_sock = None
 
-        # ----- Estado do "banco" -----
+        # estados, aqui colocaremos os locks e mutexes
         self.accounts: Dict[str, int] = {}            # saldo em centavos. Key sempre será string, Value sempre será int.
         self._locks: Dict[str, threading.Lock] = {}   # lock por conta
         self._processed: Set[str] = set()             # idempotência por tx_id. Uma transação por movimento, não podendo ter duplicatas.
@@ -27,8 +27,19 @@ class BankServer:
 
         # Cria state.json se não existir
         if not os.path.exists(self._state_path):
+            default_state = {
+                "accounts": {
+                    "alice": 100000,
+                    "antonio": 50000,
+                    "davi": 50000000,
+                    "joao pedro": 75000,
+                    "tanaka": 75000,
+                    "leo": 75000
+                },
+                "timestamp": time.time()
+            }
             with open(self._state_path, "w", encoding="utf-8") as f:
-                json.dump({"accounts": {}, "timestamp": time.time()}, f, ensure_ascii=False, indent=2)
+                json.dump(default_state, f, ensure_ascii=False, indent=2)
 
     # ---------- utilidades ----------
     def _get_lock(self, user: str) -> threading.Lock:
@@ -51,10 +62,18 @@ class BankServer:
     def _append_wal(self, entry: dict):
         with open(self._wal_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
+    def _transaction_delay(self, operation: str, user: str, tx_id: str):
+        """Simula processamento de transação com delay de 5 segundos"""
+        print(f"[{time.strftime('%H:%M:%S')}] Iniciando {operation} para {user} (tx_id: {tx_id[:8]}...)")
+        print(f"[{time.strftime('%H:%M:%S')}] Processando transação... (20s delay)")
+        time.sleep(20)  # Delay de 20 segundos, VAMOS DESABILITAR ISSO DEPOIS
+        print(f"[{time.strftime('%H:%M:%S')}] Transação {operation} para {user} concluída")
+
 
     # ---------- operações de negócio ----------
     def op_init_accounts(self, accounts: Dict[str, int]):
-        # Cria/atualiza contas com saldos iniciais (centavos)
+        # Cria/atualiza contas com saldos iniciais (CONSIDERA CENTAVSO!!!)
         with self._global_lock:
             for u, cents in accounts.items():
                 self.accounts[u] = int(cents)
@@ -79,11 +98,15 @@ class BankServer:
 
         self._ensure_account(user)
         with self._get_lock(user):
+            # Simula processamento com delay
+            self._transaction_delay("DEPOSIT", user, tx_id)
+            
             before = self.accounts[user]
             self.accounts[user] += amount
             after = self.accounts[user]
         self._append_wal({"tx": "deposit", "tx_id": tx_id, "user": user, "amount": amount, "after": after})
         return {"ok": True, "before": before, "after": after}
+
 
     def op_withdraw(self, user: str, amount: int, tx_id: str):
         if amount <= 0:

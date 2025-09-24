@@ -1,3 +1,7 @@
 # WAL de transações (JSON por linha)
 {"tx": "deposit", "tx_id": "f5a6dfbe-9750-4ade-a1c5-dcb1b47db731", "user": "alice", "amount": 2500, "after": 102500}
 {"tx": "transfer", "tx_id": "5f531981-0866-4a29-80f8-2d2e07bc69c1", "from": "alice", "to": "bob", "amount": 777, "after_from": 101723, "after_to": 50777}
+{"tx": "deposit", "tx_id": "931a390b-eaa8-4dfe-9ca2-66c4959a785c", "user": "alice", "amount": 200, "after": 100200}
+{"tx": "deposit", "tx_id": "03523e7b-5a19-4fe0-bb2a-31a18c1e6c6d", "user": "alice", "amount": 200, "after": 100400}
+{"tx": "deposit", "tx_id": "01a7c9c9-3e13-4090-8f14-49c9f0bd17d1", "user": "alice", "amount": 200, "after": 100600}
+{"tx": "deposit", "tx_id": "42863152-fc5e-4129-a20e-298873228ae1", "user": "alice", "amount": 200, "after": 100800}
