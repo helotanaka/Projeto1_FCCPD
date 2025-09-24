@@ -119,6 +119,9 @@ class BankServer:
 
         self._ensure_account(user)
         with self._get_lock(user):
+            # Simula processamento com delay
+            self._transaction_delay("WITHDRAW", user, tx_id)
+
             if self.accounts[user] < amount:
                 return {"ok": False, "error": "insufficient funds", "balance": self.accounts[user]}
             before = self.accounts[user]
@@ -146,6 +149,9 @@ class BankServer:
         l1, l2 = self._get_lock(u1), self._get_lock(u2)
         with l1:
             with l2:
+                # Simula processamento com delay
+                self._transaction_delay("TRANSFER", from_user, tx_id)
+
                 # agora temos os dois locks; decide débito/crédito
                 if self.accounts[from_user] < amount:
                     return {"ok": False, "error": "insufficient funds", "balance": self.accounts[from_user]}
