@@ -10,10 +10,10 @@ class BankServer:
         self._srv_sock = None
 
         # ----- Estado do "banco" -----
-        self.accounts: Dict[str, int] = {}            # saldo em centavos
+        self.accounts: Dict[str, int] = {}            # saldo em centavos. Key sempre será string, Value sempre será int.
         self._locks: Dict[str, threading.Lock] = {}   # lock por conta
-        self._processed: Set[str] = set()             # idempotência por tx_id
-        self._global_lock = threading.RLock()         # protege dicionários
+        self._processed: Set[str] = set()             # idempotência por tx_id. Uma transação por movimento, não podendo ter duplicatas.
+        self._global_lock = threading.RLock()         # protege dicionários. Usamos RLock porque vamos precisar que a mesma thread chama o lock novamente.
         self._wal_path = "transactions.log"           # write-ahead log simples
         self._state_path = "state.json"               # snapshot ocasional
 
@@ -189,7 +189,7 @@ class BankServer:
                     conn, addr = self._srv_sock.accept()
                 except socket.timeout:
                     continue
-                threading.Thread(target=self._handle_client, args=(conn, addr), daemon=True).start()
+                threading.Thread(target=self._handle_client, args=(conn, addr), daemon=True).start() # cria threads por cliente
         finally:
             print("[server] closing...")
             try: self._srv_sock.close()

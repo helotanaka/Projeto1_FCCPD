@@ -14,7 +14,7 @@ def rpc(host, port, payload: dict):
 def main():
     if len(sys.argv) < 4:
         print("Uso:")
-        print("  python client.py HOST PORT init '{\"alice\":100000,\"bob\":50000}'")
+        print("  python client.py HOST PORT init '{\"alice\":100000,\"bob\":50000} (crie um json com as contas)'")
         print("  python client.py HOST PORT balance alice")
         print("  python client.py HOST PORT deposit alice 2500")
         print("  python client.py HOST PORT withdraw bob 1000")
