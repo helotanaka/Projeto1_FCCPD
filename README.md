@@ -1,11 +1,12 @@
 # Sistema Bancário Distribuído com Controle de Concorrência
 
 Alunos:
-ANTONIO PAULO ARAUJO DE BARROS E SILVA - apabs@cesar.school
-DAVI GOMES FERREIRA RUY DE ALMEIDA - dgfra@cesar.school
-HELOÍSA TANAKA FERNANDES - htf@cesar.school
-JOÃO PEDRO FONTES FERREIRA - jpff2@cesar.school
-LEONARDO CARDOSO DE CARVALHO GUEDES - lccg@cesar.school
+
+- ANTONIO PAULO ARAUJO DE BARROS E SILVA - apabs@cesar.school
+- DAVI GOMES FERREIRA RUY DE ALMEIDA - dgfra@cesar.school
+- HELOÍSA TANAKA FERNANDES - htf@cesar.school
+- OÃO PEDRO FONTES FERREIRA - jpff2@cesar.school
+- LEONARDO CARDOSO DE CARVALHO GUEDES - lccg@cesar.school
 
 ## Trabalho
 
